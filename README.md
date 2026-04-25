@@ -1,7 +1,7 @@
 # Force Dark Mode Exceptions 🕶🖥
 **A performant userscript for Desktop to disable Chrome's "Auto Dark Mode" flag on specific sites.**
 
-Unlike chrome extensions, this Desktop script targets the Chromium engine's forced-dark filters, securely ensuring your whitelisted sites maintain their original, non-dark UI or respect their native dark themes.
+Unlike unperforChrome extensions, this Desktop script targets the Chromium engine's forced-dark filters, securely ensuring your whitelisted sites maintain their original, non-dark UI or respect their native dark themes.
 
 <br>
 

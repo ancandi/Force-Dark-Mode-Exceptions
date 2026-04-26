@@ -3,6 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  Disables Chrome's Force Dark Mode flag on specific sites.
+// @icon         https://raw.githubusercontent.com/ancandi/Force-Dark-Mode-Exceptions/main/glasses-icon.png
 // @run-at       document-start
 // @grant        GM_addStyle
 // @allFrames    true

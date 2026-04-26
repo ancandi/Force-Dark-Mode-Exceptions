@@ -9,12 +9,6 @@
 // @match        *://*.youtube.com/*
 // @match        *://*.github.com/*
 // @match        *://google.com/*
-// @match        *://*.rankdle.com/*
-// @match        *://*.photopea.com/*
-// @match        *://*.canva.com/*
-// @match        *://*.flourish.studio/*
-// @match        *://*.flourish.app/*
-// @match        *://*.flourish-user-templates.com/*
 // ==/UserScript==
 
 (function () {

@@ -10,6 +10,8 @@
 // @match        *://*.youtube.com/*
 // @match        *://*.github.com/*
 // @match        *://google.com/*
+// @match        file:///*/*.html*
+// @match        *://*/*.html*
 // ==/UserScript==
 
 (function () {

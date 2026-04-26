@@ -15,7 +15,7 @@ Unlike sluggish Chrome extensions, this Desktop script targets the Chromium engi
 * **Automatic Detection**: The script identifies the domain; if it matches the metadata, all forced filters are instantly neutralized.
 * **Default Whitelist**: Pre-configured for google.com, youtube.com, and github.com.
 * **Adding Sites**: Open the script editor and add a new // @match line for any site where the browser's dark mode breaks the UI.
-> Note: You may have to use the *://**.domain.com/* format to ensure all subdomains and paths are recognized.
+> Note: You may have to use the `*://*.domain.com/*` format to ensure all subdomains and paths are recognized.
 > 
 <br>
 

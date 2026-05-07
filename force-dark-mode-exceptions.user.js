@@ -1,15 +1,103 @@
 // ==UserScript==
 // @name         Force Dark Mode Exceptions
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Disables Chrome's Force Dark Mode flag on specific sites.
 // @icon         https://raw.githubusercontent.com/ancandi/Force-Dark-Mode-Exceptions/main/glasses-icon.png
 // @run-at       document-start
 // @grant        GM_addStyle
 // @allFrames    true
-// @match        *://*.youtube.com/*
+// General / Search
+// @match        *://.google.com/*
+// @match        *://*.duckduckgo.com/*
+// @match        *://*.brave.com/*
+// @match        *://*.wikipedia.org/*
+
+// Social & Communciation
+// @match        *://*.reddit.com/*
+// @match        *://*.discord.com/*
+// @match        *://*.twitch.tv/*
+// @match        *://*.x.com/*
+// @match        *://*.twitter.com/*
+
+// Productivity & Workspace
+// @match        *://*.notion.so/*
+// @match        *://*.linear.app/*
+// @match        *://*.trello.com/*
+// @match        *://*.miro.com/*
+
+// Dev Tools & AI
 // @match        *://*.github.com/*
-// @match        *://google.com/*
+// @match        *://*.stackoverflow.com/*
+// @match        *://*.codepen.io/*
+// @match        *://*.replit.com/*
+// @match        *://*.vercel.com/*
+// @match        *://developer.mozilla.org/*
+// @match        *://chatgpt.com/*
+// @match        *://claude.ai/*
+// @match        *://*.huggingface.co/*
+
+// Design & Creative Tools
+// @match        *://*.photopea.com/*
+// @match        *://*.vectorpea.com/*
+// @match        *://*.canva.com/*
+// @match        *://*.figma.com/*
+// @match        *://*.excalidraw.com/*
+// @match        *://*.pixlr.com/*
+// @match        *://*.spline.design/*
+// @match        *://*.coolors.co/*
+// @match        *://*.color-hex.com/*
+// @match        *://*.flourish.studio/*
+// @match        *://*.flourish.app/*
+// @match        *://*.flourish-user-templates.com/*
+
+// Education
+// @match        *://*.geogebra.org/*
+// @match        *://*.desmos.com/*
+// @match        *://*.wolframalpha.com/*
+// @match        *://*.khanacademy.org/*
+
+// FMHY/Repos
+// @match        *://*.fmhy.net/*
+// @match        *://*.rentry.co/*
+// @match        *://*.rentry.org/*
+// @match        *://*.lemmy.world/*
+
+// Video Streaming (Movies, TV, Anime)
+// @match        *://*.youtube.com/*
+// @match        *://*.netflix.com/*
+// @match        *://*.braflix.ru/*
+// @match        *://*.braflix.video/*
+// @match        *://*.fbox.to/*
+// @match        *://*.fmoviesz.to/*
+// @match        *://*.sudo-flix.lol/*
+// @match        *://*.sudo-flix.rip/*
+// @match        *://*.hianime.to/*
+// @match        *://*.aniwave.to/*
+// @match        *://*.yarrlist.com/*
+
+// Reading (Mangoa, Books)
+// @match        *://*.mangadex.org/*
+// @match        *://*.weebcentral.com/*
+// @match        *://*.mangafire.to/*
+// @match        *://*.manganato.com/*
+// @match        *://*.annas-archive.org/*
+
+// Downloads, Tracker, Storage
+// @match        *://*.mega.nz/*
+// @match        *://*.gofile.io/*
+// @match        *://*.pixeldrain.com/*
+// @match        *://*.qiwi.gg/*
+// @match        *://*.1337x.to/*
+// @match        *://*.nyaa.si/*
+// @match        *://*.dodi-repacks.site/*
+// @match        *://*.torrentgalaxy.to/*
+
+// Misc
+// @match        *://*.rankdle.com/*
+// @match        *://*.mdigi.tools/*
+// @match        *://gchq.github.io/CyberChef/*
+// @match        *://*.virustotal.com/*
 // @match        file:///*/*.html*
 // @match        *://*/*.html*
 // ==/UserScript==

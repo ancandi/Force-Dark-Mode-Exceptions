@@ -2,13 +2,14 @@
 // @name         Force Dark Mode Exceptions
 // @namespace    http://tampermonkey.net/
 // @version      1.1
-// @description  Alt+Shift+S (Site) / Alt+Shift+D (Domain) - Disables Chrome's Force Dark Mode flag by site or domain.
+// @description  Alt+S (Site) / Alt+D (Domain) - Disables Chrome's Force Dark Mode flag by site or domain.
 // @icon         https://raw.githubusercontent.com/ancandi/Force-Dark-Mode-Exceptions/main/glasses-icon.png
 // @author       ancandi
 // @match        *://*/*
 // @run-at       document-start
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @grant        GM_registerMenuCommand
 // @allFrames    true
 // ==/UserScript==
 
@@ -97,7 +98,7 @@
                 filter: none !important;
             ">
                 <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; opacity: 0.6; margin-bottom: 2px;">${scopeLabel}</div>
-                <div style="font-size: 16px; font-weight: 700; letter-spacing: 0.03em;">${isAdding ? 'Light Mode Enabled' : 'Dark Mode Enabled'}</div>
+                <div style="font-size: 16px; font-weight: 700; letter-spacing: 0.03em;">${isAdding ? 'Light Mode Enabled' : 'System Default'}</div>
                 <div style="font-size: 14px; font-weight: 600; letter-spacing: 0.01em; opacity: 0.7; margin-top: 2px;">${targetName}</div>
             </div>
         `;
@@ -131,18 +132,24 @@
     };
 
     // Hotkey Listener
+    GM_registerMenuCommand(`Site Exception: ALT + S (${host})`, () => toggle(ex, host, "ex", "Site Exception"));
+    GM_registerMenuCommand(`Toggle Domain: ALT + D (${root})`, () => toggle(dm, root, "dm", "Domain"));
+
     window.addEventListener('keydown', (e) => {
-        // Must have Alt and Shift held down
-        if (e.altKey && e.shiftKey) {
-            if (e.code === 'KeyS') {
+        // Only trigger if Alt is held
+        if (e.altKey && !e.shiftKey && !e.ctrlKey) {
+            if (e.code === 'KeyS' || e.code === 'KeyD') {
+                e.stopImmediatePropagation();
                 e.preventDefault();
-                toggle(ex, host, "ex", "Site Exception");
-            } else if (e.code === 'KeyD') {
-                e.preventDefault();
-                toggle(dm, root, "dm", "Domain");
+
+                if (e.code === 'KeyS') {
+                    toggle(ex, host, "ex", "Site Exception");
+                } else {
+                    toggle(dm, root, "dm", "Domain");
+                }
             }
         }
-    });
+    }, true);
 
     const CSS = `*,html,body{color-scheme:only light!important}html,canvas{filter:none!important}svg,svg *{filter:none!important;mix-blend-mode:normal!important;backdrop-filter:none!important}`;
 

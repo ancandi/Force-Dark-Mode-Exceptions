@@ -28,7 +28,7 @@
         "braflix.ru", "braflix.video", "fbox.to", "fmoviesz.to", "sudo-flix.lol", "sudo-flix.rip", "hianime.to", "aniwave.to",
         "yarrlist.com", "mangadex.org", "weebcentral.com", "mangafire.to", "manganato.com", "annas-archive.org", "mega.nz",
         "gofile.io", "pixeldrain.com", "qiwi.gg", "1337x.to", "nyaa.si", "dodi-repacks.site", "torrentgalaxy.to", "rankdle.com",
-        "mdigi.tools", "virustotal.com"
+        "mdigi.tools", "virustotal.com", "chatgpt.com"
     ];
 
     let ex = GM_getValue("ex", []);

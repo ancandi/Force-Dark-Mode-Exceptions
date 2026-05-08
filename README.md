@@ -3,6 +3,8 @@
 
 Unlike sluggish Chrome extensions, this Desktop script targets the Chromium engine's forced-dark filters, securely ensuring your whitelisted sites maintain their original, non-dark UI or respect their native dark themes.
 
+<img src="https://raw.githubusercontent.com/ancandi/Force-Dark-Mode-Exceptions/refs/heads/main/gui.png" width="100%"/>
+
 <br>
 
 ## 📥 Installation

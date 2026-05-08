@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Force Dark Mode Exceptions
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  Alt + S (Site) / Alt + D (Domain) - Disables Chrome's Force Dark Mode flag by site or domain.
 // @icon         https://raw.githubusercontent.com/ancandi/Force-Dark-Mode-Exceptions/main/glasses-icon.png
 // @author       ancandi
@@ -10,6 +10,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_registerMenuCommand
+// @grant        GM_addElement
 // @allFrames    true
 // ==/UserScript==
 
@@ -31,113 +32,137 @@
         "mdigi.tools", "virustotal.com", "chatgpt.com"
     ];
 
-    let ex = GM_getValue("ex", []);
-    let dm = GM_getValue("dm");
-    if (dm === undefined) { dm = defaultDomains; GM_setValue("dm", dm); }
+    const ex = GM_getValue("ex", []);
+    const dm = GM_getValue("dm", defaultDomains);
+    if (GM_getValue("dm") === undefined) GM_setValue("dm", dm);
+
+    const buildEl = (tag, cssText, textContent = "") => {
+        const el = document.createElement(tag);
+        if (cssText) el.style.cssText = cssText;
+        if (textContent) el.textContent = textContent;
+        return el;
+    };
 
     const showIndicator = (targetName, actionType, scopeLabel) => {
-        const id = 'f-mode-hud-container';
-        let container = document.getElementById(id);
-        if (container) container.remove();
+        const id = "f-mode-hud-wrapper";
+        document.getElementById(id)?.remove();
 
-        container = document.createElement('div');
-        container.id = id;
-        Object.assign(container.style, {
-            position: 'fixed', top: '16px', left: '50%', transform: 'translateX(-50%)',
-            zIndex: '2147483647', pointerEvents: 'none', display: 'flex',
-            flexDirection: 'column', alignItems: 'flex-start', isolation: 'isolate', filter: 'none !important'
+        const wrapper = GM_addElement(document.documentElement, "div", {
+            id,
+            style: "position:fixed; top:16px; left:50%; transform:translateX(-50%); z-index:2147483647; pointer-events:none;"
         });
-        document.body.appendChild(container);
 
-        const isAdding = actionType === 'ADD';
+        const shadow = wrapper.attachShadow({ mode: "open" });
+        const isAdding = actionType === "ADD";
+
+        // Re-evaluate state precisely when indicator shows
         const siteActive = ex.includes(host);
         const domActive = dm.includes(root);
 
-        const getTabStyle = (active) => `
-            width: 24px; height: 20px; display: flex; align-items: center; justify-content: center;
-            border-radius: 8px 8px 0 0; font-weight: 800; font-size: 12px;
-            background: ${active ? 'rgba(255,255,255,0.98)' : 'rgba(15,15,15,0.96)'} !important;
-            color: ${active ? '#000' : '#fff'} !important;
-            border: 1px solid ${active ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)'} !important;
-            border-bottom: none !important; backdrop-filter: blur(10px) !important;
-            color-scheme: ${active ? 'only light' : 'only dark'} !important;
-            filter: none !important; transform: translateZ(0);
-        `;
+        const container = buildEl("div", "display:flex; flex-direction:column; align-items:flex-start; opacity:0; transform:translateY(-16px); transition:all 0.5s cubic-bezier(0.16, 1, 0.3, 1); filter:none;");
+        const tabRow = buildEl("div", "display:flex; gap:2px; margin-left:12px;");
 
-        container.innerHTML = `
-            <div style="display: flex; gap: 2px; margin-left: 12px;">
-                <div style="${getTabStyle(siteActive)}">S</div>
-                <div style="${getTabStyle(domActive)}">D</div>
-            </div>
-            <div id="f-mode-main-hud" style="
-                padding: 10px 36px; border-radius: 0 24px 24px 24px;
-                font-family: sans-serif, 'Segoe UI Variable Text';
-                box-shadow: 0 10px 30px rgba(0,0,0,0.25); text-align: center; min-width: 240px;
-                backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
-                background: ${isAdding ? 'rgba(255, 255, 255, 0.98)' : 'rgba(15, 15, 15, 0.96)'} !important;
-                color: ${isAdding ? '#000' : '#fff'} !important;
-                border: 1px solid ${isAdding ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.1)'};
-                color-scheme: ${isAdding ? 'only light' : 'only dark'} !important;
-                transform: translateZ(0); filter: none !important;
-            ">
-                <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; opacity: 0.6;">${scopeLabel}</div>
-                <div style="font-size: 16px; font-weight: 700;">${isAdding ? 'Light Mode Enabled' : 'System Default'}</div>
-                <div style="font-size: 14px; opacity: 0.7;">${targetName}</div>
-            </div>
-        `;
+        const createTab = (label, active) => buildEl("div",
+            `width:24px; height:20px; display:flex; align-items:center; justify-content:center; border-radius:8px 8px 0 0; font-weight:800; font-size:12px; font-family:sans-serif; background:${active ? "rgba(255,255,255,0.98)" : "rgba(15,15,15,0.96)"} !important; color:${active ? "#000" : "#fff"} !important; border:1px solid ${active ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.2)"} !important; border-bottom:none !important; backdrop-filter:blur(10px); color-scheme:${active ? "only light" : "only dark"} !important;`,
+            label
+        );
 
-        container.style.opacity = '0';
-        container.style.transform = 'translateX(-50%) translateY(-16px)';
+        tabRow.append(createTab("S", siteActive), createTab("D", domActive));
+
+        const mainHud = buildEl("div", `padding:10px 36px; border-radius:0 24px 24px 24px; font-family:sans-serif, 'Segoe UI'; box-shadow:0 10px 30px rgba(0,0,0,0.25); text-align:center; min-width:240px; backdrop-filter:blur(20px) saturate(180%); -webkit-backdrop-filter:blur(20px) saturate(180%); background:${isAdding ? "rgba(255,255,255,0.98)" : "rgba(15,15,15,0.96)"} !important; color:${isAdding ? "#000" : "#fff"} !important; border:1px solid ${isAdding ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.1)"}; color-scheme:${isAdding ? "only light" : "only dark"} !important;`);
+
+        mainHud.append(
+            buildEl("div", "font-size:10px; font-weight:700; text-transform:uppercase; opacity:0.6;", scopeLabel),
+            buildEl("div", "font-size:16px; font-weight:700;", isAdding ? "Light Mode Enabled" : "System Default"),
+            buildEl("div", "font-size:14px; opacity:0.7;", targetName)
+        );
+
+        container.append(tabRow, mainHud);
+        shadow.append(container);
+
         requestAnimationFrame(() => {
-            container.style.transition = 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
-            container.style.opacity = '1';
-            container.style.transform = 'translateX(-50%) translateY(0)';
+            container.style.opacity = "1";
+            container.style.transform = "translateY(0)";
         });
 
         setTimeout(() => {
-            container.style.opacity = '0';
-            setTimeout(() => { location.reload(); }, 200);
+            container.style.opacity = "0";
+            setTimeout(() => location.reload(), 300);
         }, 2500);
     };
 
     const toggle = (list, item, key, scopeLabel) => {
         const index = list.indexOf(item);
         const isAdding = index === -1;
-        isAdding ? list.push(item) : list.splice(index, 1);
+        if (isAdding) list.push(item); else list.splice(index, 1);
         GM_setValue(key, list);
-        showIndicator(item, isAdding ? 'ADD' : 'REMOVE', scopeLabel);
+        showIndicator(item, isAdding ? "ADD" : "REMOVE", scopeLabel);
     };
 
-    GM_registerMenuCommand(`Site: ALT+S`, () => toggle(ex, host, "ex", "Site Exception"));
-    GM_registerMenuCommand(`Domain: ALT+D`, () => toggle(dm, root, "dm", "Domain"));
+    const actions = {
+        KeyS: () => toggle(ex, host, "ex", "Site Exception"),
+        KeyD: () => toggle(dm, root, "dm", "Domain")
+    };
 
-    window.addEventListener('keydown', (e) => {
-        if (e.altKey && !e.shiftKey && !e.ctrlKey) {
-            if (e.code === 'KeyS') { e.preventDefault(); toggle(ex, host, "ex", "Site Exception"); }
-            if (e.code === 'KeyD') { e.preventDefault(); toggle(dm, root, "dm", "Domain"); }
+    GM_registerMenuCommand("Site: ALT+S", actions.KeyS);
+    GM_registerMenuCommand("Domain: ALT+D", actions.KeyD);
+
+    window.addEventListener("keydown", (e) => {
+        if (e.altKey && !e.shiftKey && !e.ctrlKey && actions[e.code]) {
+            e.preventDefault();
+            actions[e.code]();
         }
     }, true);
 
-    const CSS = `*,html,body{color-scheme:only light!important}html,canvas{filter:none!important}svg,svg *{filter:none!important;mix-blend-mode:normal!important;backdrop-filter:none!important}`;
-    const injectStyle = (t) => {
-        const r = t.shadowRoot || t;
-        if (r && !r.getElementById("f-l-style")) {
-            const s = document.createElement("style");
-            s.id = "f-l-style"; s.textContent = CSS;
-            r.appendChild(s);
-        }
-    };
-
     if (ex.includes(host) || dm.includes(root)) {
-        document.documentElement.append(Object.assign(document.createElement("style"), { textContent: CSS }));
+        const CSS = "*,html,body{color-scheme:only light!important}html,canvas{filter:none!important}svg,svg *{filter:none!important;mix-blend-mode:normal!important;backdrop-filter:none!important}";
+
         document.documentElement.prepend(Object.assign(document.createElement("meta"), { name: "color-scheme", content: "only light" }));
-        window.matchMedia = (o => q => q?.includes("prefers-color-scheme") ? { matches: false, media: q, onchange: null, addListener(){}, removeListener(){}, addEventListener(){}, removeEventListener(){}, dispatchEvent(){return false}} : o.call(window, q))(window.matchMedia);
-        window.getComputedStyle = (o => el => {
-            const s = o.call(window, el);
+
+        const injectStyle = (rootNode) => {
+            if (rootNode && !rootNode.getElementById?.("f-l-style")) {
+                const s = document.createElement("style");
+                s.id = "f-l-style";
+                s.textContent = CSS;
+                rootNode.appendChild(s);
+            }
+        };
+
+        injectStyle(document.documentElement);
+
+        const ogMatchMedia = window.matchMedia;
+        window.matchMedia = q => q?.includes("prefers-color-scheme")
+            ? { matches: false, media: q, onchange: null, addListener(){}, removeListener(){}, addEventListener(){}, removeEventListener(){}, dispatchEvent(){return false}}
+            : ogMatchMedia.call(window, q);
+
+        const ogGetComputedStyle = window.getComputedStyle;
+        window.getComputedStyle = el => {
+            const s = ogGetComputedStyle.call(window, el);
             return s ? new Proxy(s, { get: (t, p) => (p === "colorScheme" || p === "color-scheme") ? "light" : t[p] }) : s;
-        })(window.getComputedStyle);
-        Element.prototype.attachShadow = (o => function (i) { const s = o.call(this, i); setTimeout(() => injectStyle(this), 0); return s; })(Element.prototype.attachShadow);
-        new MutationObserver(ms => ms.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1) injectStyle(n); }))).observe(document.documentElement, { childList: true, subtree: true });
-        window.addEventListener("DOMContentLoaded", () => document.querySelectorAll("*").forEach(injectStyle));
+        };
+
+        const ogAttachShadow = Element.prototype.attachShadow;
+        Element.prototype.attachShadow = function (init) {
+            const shadow = ogAttachShadow.call(this, init);
+            injectStyle(shadow);
+            return shadow;
+        };
+
+        new MutationObserver(ms => {
+            for (let i = 0; i < ms.length; i++) {
+                const nodes = ms[i].addedNodes;
+                for (let j = 0; j < nodes.length; j++) {
+                    const n = nodes[j];
+                    if (n.nodeType === 1 && n.shadowRoot) injectStyle(n.shadowRoot);
+                }
+            }
+        }).observe(document.documentElement, { childList: true, subtree: true });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const elements = document.querySelectorAll("*");
+            for (let i = 0; i < elements.length; i++) {
+                if (elements[i].shadowRoot) injectStyle(elements[i].shadowRoot);
+            }
+        });
     }
 })();

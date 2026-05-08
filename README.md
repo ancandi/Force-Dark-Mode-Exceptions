@@ -13,7 +13,17 @@ Unlike sluggish Chrome extensions, this Desktop script targets the Chromium engi
 ## 🛠️ How to Use
 * **Install**: Add the script to your preferred manager (Tampermonkey, Violentmonkey, or Greasemonkey).
 * **Automatic Detection**: The script identifies the domain; if it matches the metadata, all forced filters are instantly neutralized.
-* **Default Whitelist**: Pre-configured for google.com, youtube.com, and github.com. (also potentially old websites)
+* **Default Whitelist**: Pre-configured for:
+> `"duckduckgo.com", "github.com", "brave.com", "wikipedia.org", "reddit.com", "discord.com", "twitch.tv", "x.com", "twitter.com",
+        "notion.so", "linear.app", "trello.com", "miro.com", "stackoverflow.com", "codepen.io", "replit.com", "vercel.com",
+        "chatgpt.com", "claude.ai", "huggingface.co", "photopea.com", "vectorpea.com", "canva.com", "figma.com", "excalidraw.com",
+        "pixlr.com", "spline.design", "coolors.co", "color-hex.com", "flourish.studio", "flourish.app", "geogebra.org", "desmos.com",
+        "wolframalpha.com", "khanacademy.org", "fmhy.net", "rentry.co", "rentry.org", "lemmy.world", "youtube.com", "netflix.com",
+        "braflix.ru", "braflix.video", "fbox.to", "fmoviesz.to", "sudo-flix.lol", "sudo-flix.rip", "hianime.to", "aniwave.to",
+        "yarrlist.com", "mangadex.org", "weebcentral.com", "mangafire.to", "manganato.com", "annas-archive.org", "mega.nz",
+        "gofile.io", "pixeldrain.com", "qiwi.gg", "1337x.to", "nyaa.si", "dodi-repacks.site", "torrentgalaxy.to", "rankdle.com",
+        "mdigi.tools", "virustotal.com", "chatgpt.com"`
+
 * **Adding Sites**: Open the script editor and add a new // @match line for any site where the browser's dark mode breaks the UI.
 > Note: You may have to use the `*://*.domain.com/*` format to ensure all subdomains and paths are recognized.
 > Also ensure that your script extension does not blacklist any particular sites in its settings.

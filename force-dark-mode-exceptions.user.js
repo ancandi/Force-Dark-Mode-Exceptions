@@ -115,8 +115,21 @@
     }, true);
 
     if (ex.includes(host) || dm.includes(root)) {
-        const CSS = "*,html,body{color-scheme:only light!important}html,canvas{filter:none!important}svg,svg *{filter:none!important;mix-blend-mode:normal!important;backdrop-filter:none!important}";
+        const CSS = `
+          *, html, body { color-scheme: only light !important; }
+          html, canvas { filter: none !important; }
+          svg, svg * { filter: none !important; mix-blend-mode: normal !important; backdrop-filter: none !important; }
 
+          /* YouTube Caption Fix */
+          .ytp-caption-window-container,
+          .ytp-caption-segment,
+          .caption-window {
+            filter: none !important;
+            background: rgba(8, 8, 8, 0.75) !important; /* Standard YT dark cap background */
+            color: white !important; /* Standard YT white text */
+            text-shadow: 0 0 2px rgba(0,0,0,0.5) !important;
+          }
+        `;
         document.documentElement.prepend(Object.assign(document.createElement("meta"), { name: "color-scheme", content: "only light" }));
 
         const injectStyle = (rootNode) => {

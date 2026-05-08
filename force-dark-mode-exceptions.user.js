@@ -106,10 +106,6 @@
                 filter: none !important;
                 -webkit-filter: none !important;
             }
-            /* Attempts to block browser force-dark-mode flag inversion on new popups (may not work) */
-            html, body {
-                background-image: linear-gradient(transparent, transparent) !important;
-            }
         `;
 
         const injectStyle = (rootNode) => {

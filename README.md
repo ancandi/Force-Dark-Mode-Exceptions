@@ -42,7 +42,6 @@ Unlike sluggish Chrome extensions, this Desktop script targets the Chromium engi
 * **Force Dark Mode Exceptions** — Contrast & UI control for Chromium/Desktop (v1.2).
 * **Night Mode Disabler (Whitelist)** — Contrast control for mobile UI (v1.0.1).
 * **YouTube Shield (Zero UI)** — Invisible automation engine (v4.0.1).
-> Note: A lot of these I made for mobile users in mind, EXCEPT **Force Dark Mode Exceptions**.
 
 #### 🔗 External Resources
 * ⚡ **Evade** — via **[Evade - Link Bypasser](https://skipped.lol/)**
@@ -57,7 +56,7 @@ Unlike sluggish Chrome extensions, this Desktop script targets the Chromium engi
 ---
 ## AND1 UserScripts — all of my userscripts. ⬇
 > Otherwise, check out the full source code and technical documentation at **[github.com/ancandi](https://github.com/ancandi)**.
-
+> Note: A lot of these I made for mobile users in mind, EXCEPT **Force Dark Mode Exceptions**.
 ---
 
 #### 🚀 Video Bitrate O/BA

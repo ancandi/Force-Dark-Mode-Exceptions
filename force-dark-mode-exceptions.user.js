@@ -29,7 +29,7 @@
         "braflix.ru", "braflix.video", "fbox.to", "fmoviesz.to", "sudo-flix.lol", "sudo-flix.rip", "hianime.to", "aniwave.to",
         "yarrlist.com", "mangadex.org", "weebcentral.com", "mangafire.to", "manganato.com", "annas-archive.org", "mega.nz",
         "gofile.io", "pixeldrain.com", "qiwi.gg", "1337x.to", "nyaa.si", "dodi-repacks.site", "torrentgalaxy.to", "rankdle.com",
-        "mdigi.tools", "virustotal.com", "chatgpt.com"
+        "mdigi.tools", "virustotal.com"
     ];
 
     const ex = GM_getValue("ex", []);
@@ -54,8 +54,6 @@
 
         const shadow = wrapper.attachShadow({ mode: "open" });
         const isAdding = actionType === "ADD";
-
-        // Re-evaluate state precisely when indicator shows
         const siteActive = ex.includes(host);
         const domActive = dm.includes(root);
 
@@ -116,28 +114,33 @@
 
     if (ex.includes(host) || dm.includes(root)) {
         const CSS = `
-          *, html, body { color-scheme: only light !important; }
-          html, canvas { filter: none !important; }
-          svg, svg * { filter: none !important; mix-blend-mode: normal !important; backdrop-filter: none !important; }
-
-          /* YouTube Caption Fix */
-          .ytp-caption-window-container,
-          .ytp-caption-segment,
-          .caption-window {
-            filter: none !important;
-            background: rgba(8, 8, 8, 0.75) !important; /* Standard YT dark cap background */
-            color: white !important; /* Standard YT white text */
-            text-shadow: 0 0 2px rgba(0,0,0,0.5) !important;
-          }
+            :root, html, body {
+                color-scheme: only light !important;
+            }
+            html, body, canvas, video, img, svg, iframe {
+                filter: none !important;
+            }
+            [role] {
+                filter: none !important;
+            }
         `;
-        document.documentElement.prepend(Object.assign(document.createElement("meta"), { name: "color-scheme", content: "only light" }));
+
+        const meta = document.createElement("meta");
+        meta.name = "color-scheme";
+        meta.content = "only light";
+        document.documentElement.prepend(meta);
 
         const injectStyle = (rootNode) => {
-            if (rootNode && !rootNode.getElementById?.("f-l-style")) {
+            if (!rootNode) return;
+            const dest = rootNode.shadowRoot ||
+                         (rootNode.nodeType === 11 ? rootNode :
+                         (rootNode === document.documentElement ? (document.head || document.documentElement) : rootNode));
+
+            if (dest && !dest.querySelector?.("#f-l-style")) {
                 const s = document.createElement("style");
                 s.id = "f-l-style";
                 s.textContent = CSS;
-                rootNode.appendChild(s);
+                dest.appendChild(s);
             }
         };
 
@@ -157,25 +160,27 @@
         const ogAttachShadow = Element.prototype.attachShadow;
         Element.prototype.attachShadow = function (init) {
             const shadow = ogAttachShadow.call(this, init);
-            injectStyle(shadow);
+            setTimeout(() => injectStyle(shadow), 0);
             return shadow;
         };
 
         new MutationObserver(ms => {
             for (let i = 0; i < ms.length; i++) {
-                const nodes = ms[i].addedNodes;
-                for (let j = 0; j < nodes.length; j++) {
-                    const n = nodes[j];
-                    if (n.nodeType === 1 && n.shadowRoot) injectStyle(n.shadowRoot);
-                }
+                ms[i].addedNodes.forEach(n => {
+                    if (n.nodeType === 1) {
+                        if (n.shadowRoot) injectStyle(n.shadowRoot);
+                        n.querySelectorAll?.('*').forEach(el => {
+                            if (el.shadowRoot) injectStyle(el.shadowRoot);
+                        });
+                    }
+                });
             }
         }).observe(document.documentElement, { childList: true, subtree: true });
 
         window.addEventListener("DOMContentLoaded", () => {
-            const elements = document.querySelectorAll("*");
-            for (let i = 0; i < elements.length; i++) {
-                if (elements[i].shadowRoot) injectStyle(elements[i].shadowRoot);
-            }
+            document.querySelectorAll("*").forEach(el => {
+                if (el.shadowRoot) injectStyle(el.shadowRoot);
+            });
         });
     }
 })();

@@ -12,28 +12,21 @@ Unlike sluggish Chrome extensions, this Desktop script targets the Chromium engi
 
 ## 🛠️ How to Use
 * **Install**: Add the script to your preferred manager (Tampermonkey, Violentmonkey, or Greasemonkey).
-* **Automatic Detection**: The script identifies the domain; if it matches the metadata, all forced filters are instantly neutralized.
-* **Default Whitelist**: Pre-configured for:
-> `"duckduckgo.com", "github.com", "brave.com", "wikipedia.org", "reddit.com", "discord.com", "twitch.tv", "x.com", "twitter.com",
-        "notion.so", "linear.app", "trello.com", "miro.com", "stackoverflow.com", "codepen.io", "replit.com", "vercel.com",
-        "chatgpt.com", "claude.ai", "huggingface.co", "photopea.com", "vectorpea.com", "canva.com", "figma.com", "excalidraw.com",
-        "pixlr.com", "spline.design", "coolors.co", "color-hex.com", "flourish.studio", "flourish.app", "geogebra.org", "desmos.com",
-        "wolframalpha.com", "khanacademy.org", "fmhy.net", "rentry.co", "rentry.org", "lemmy.world", "youtube.com", "netflix.com",
-        "braflix.ru", "braflix.video", "fbox.to", "fmoviesz.to", "sudo-flix.lol", "sudo-flix.rip", "hianime.to", "aniwave.to",
-        "yarrlist.com", "mangadex.org", "weebcentral.com", "mangafire.to", "manganato.com", "annas-archive.org", "mega.nz",
-        "gofile.io", "pixeldrain.com", "qiwi.gg", "1337x.to", "nyaa.si", "dodi-repacks.site", "torrentgalaxy.to", "rankdle.com",
-        "mdigi.tools", "virustotal.com", "chatgpt.com"`
+* **Live Toggling**: No code editing required. Use the following shortcuts to add/remove exceptions:
+    * **`Alt + S`**: Toggle current **Site** (hostname).
+    * **`Alt + D`**: Toggle current **Domain** (root).
+* **Visual Confirmation**: A sleek, non-intrusive HUD will appear at the top of the screen to confirm the status (S/D tabs) before automatically reloading the page.
+* **Default Whitelist**: Pre-configured for high-traffic sites including:
+> `GitHub, DuckDuckGo, YouTube, Reddit, Discord, Notion, ChatGPT, Claude, Vercel, StackOverflow, and more.`
 
-* **Adding Sites**: Open the script editor and add a new // @match line for any site where the browser's dark mode breaks the UI.
-> Note: You may have to use the `*://*.domain.com/*` format to ensure all subdomains and paths are recognized.
-> Also ensure that your script extension does not blacklist any particular sites in its settings.
 <br>
 
 ## 🚀 Key Features
-* **Hardware-Level Bypass**: Injects color-scheme: only light !important to signal the Chromium engine to abort forced color inversion on the GPU.
-* **Dual-Layer Failsafe**: Combines dynamic CSS injection with a root-level meta-tag override to ensure maximum compatibility across different browser versions.
-* **Zero-Latency Injection**: Executes at document-start to eliminate the "flash of dark" (FOD) often seen with extension-based dark mode managers.
-* **Native Fidelity**: Specifically designed to stop "double-darkening" on sites that already provide a native dark mode toggle.
+* **Interactive HUD**: Real-time feedback via a custom Shadow DOM interface that bypasses site CSS interference.
+* **Hardware-Level Bypass**: Injects `color-scheme: only light !important` to signal the Chromium engine to abort forced color inversion on the GPU.
+* **Shadow DOM Protection**: Automatically detects and injects styles into open Shadow Roots to prevent "Dark Mode Leakage" in complex web components.
+* **Zero-Latency Injection**: Executes at `document-start` to eliminate the "flash of dark" (FOD) often seen with extension-based managers.
+* **Smart Domain Logic**: Intelligent parsing separates specific subdomains from top-level domains for granular control.
 
 <br>
 
@@ -44,7 +37,7 @@ Unlike sluggish Chrome extensions, this Desktop script targets the Chromium engi
 #### 🚀 Primary Utilities (ancandi)
 * **YouTube Mobile URL Shield AB+** — UI-driven unmute & ad-nuke (v3.0.8).
 * **Video Bitrate O/BA** — Adaptive codec & bitrate overdrive (v1.0.1).
-* **Force Dark Mode Exceptions** — Contrast & UI control for Chromium/Desktop (v1.0).
+* **Force Dark Mode Exceptions** — Contrast & UI control for Chromium/Desktop (v1.2).
 * **Night Mode Disabler (Whitelist)** — Contrast control for mobile UI (v1.0.1).
 * **YouTube Shield (Zero UI)** — Invisible automation engine (v4.0.1).
 
@@ -103,7 +96,7 @@ Prevents aggressive "Forced Dark Mode" on mobile browsers from breaking specific
 #### 🕶 Force Dark Mode Exceptions
 **Version 1.2** | *UI Fidelity & Chrome Desktop Flag Control*
 
-Neutralizes the aggressive enable-force-dark flag in Chrome for specific sites. Prevents broken UI elements and maintains original color palettes on whitelisted domains.
+Neutralizes the aggressive enable-force-dark flag in Chrome for specific sites via interactive Hotkeys. Prevents broken UI elements and maintains original color palettes.
 
 * **>Install: Force Dark Mode Exceptions**
     * [Standard Build](https://github.com/ancandi/Force-Dark-Mode-Exceptions/raw/refs/heads/main/force-dark-mode-exceptions.user.js)

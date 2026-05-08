@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Force Dark Mode Exceptions
 // @namespace     http://tampermonkey.net/
-// @version       1.3
+// @version       1.2
 // @description   Alt + S (Site) / Alt + D (Domain) - Disables Chrome's Force Dark Mode flag by site or domain.
 // @icon          https://raw.githubusercontent.com/ancandi/Force-Dark-Mode-Exceptions/main/glasses-icon.png
 // @author        ancandi

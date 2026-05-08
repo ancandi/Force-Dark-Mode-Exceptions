@@ -55,7 +55,7 @@ Unlike sluggish Chrome extensions, this Desktop script targets the Chromium engi
 #### ⚠️ Maintenance & Status
 * **Login reminder popup remover** — `[DEVELOPMENT CEASED]`
 ---
-## AND1 UserScripts — This is the complete collection of high-performance, streamlined userscripts designed to reclaim control over mobile web experiences. ⬇
+## AND1 UserScripts — all of my userscripts. ⬇
 > Otherwise, check out the full source code and technical documentation at **[github.com/ancandi](https://github.com/ancandi)**.
 
 ---
